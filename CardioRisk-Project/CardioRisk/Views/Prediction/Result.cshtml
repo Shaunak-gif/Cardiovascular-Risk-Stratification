@@ -1,0 +1,108 @@
+@model CardioRisk.Models.RiskResultViewModel
+@{
+    ViewBag.Title = "Risk Assessment Result";
+}
+<div class="row justify-content-center">
+<div class="col-lg-9">
+
+    <div class="card mb-4 risk-@Model.Prediction.PredictedRiskClass.ToLower() p-4">
+        <div class="d-flex align-items-center">
+            <div style="font-size:4rem;" class="me-4">@Model.Prediction.RiskIcon</div>
+            <div>
+                <h2 class="mb-1">@Model.Prediction.PredictedRiskClass RISK</h2>
+                <h5 class="mb-0">@Model.Patient.FullName &nbsp;|&nbsp; Age @Model.Patient.Age</h5>
+                <small>Confidence: @Model.Prediction.ConfidenceScore.ToString("P1")</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Probability Chart -->
+        <div class="col-md-5">
+            <div class="card p-3">
+                <h6 class="mb-3">Probability Distribution</h6>
+                <canvas id="probChart" height="220"></canvas>
+                <table class="table table-sm mt-3">
+                    <tr><td>Low</td><td class="text-success fw-bold">@Model.Prediction.ProbLow.ToString("P1")</td></tr>
+                    <tr><td>Medium</td><td class="text-warning fw-bold">@Model.Prediction.ProbMedium.ToString("P1")</td></tr>
+                    <tr><td>High</td><td class="text-danger fw-bold">@Model.Prediction.ProbHigh.ToString("P1")</td></tr>
+                    <tr><td>Critical</td><td class="fw-bold">@Model.Prediction.ProbCritical.ToString("P1")</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Risk Factors & Recommendations -->
+        <div class="col-md-7">
+            <div class="card p-3 mb-3">
+                <h6 class="text-danger mb-2"><i class="fas fa-exclamation-triangle me-2"></i>Identified Risk Factors</h6>
+                <ul class="list-group list-group-flush">
+                    @foreach (var factor in Model.RiskFactors)
+                    {
+                        <li class="list-group-item py-1"><i class="fas fa-dot-circle text-danger me-2"></i>@factor</li>
+                    }
+                </ul>
+            </div>
+            <div class="card p-3">
+                <h6 class="text-success mb-2"><i class="fas fa-clipboard-list me-2"></i>Clinical Recommendations</h6>
+                <ul class="list-group list-group-flush">
+                    @foreach (var rec in Model.Recommendations)
+                    {
+                        <li class="list-group-item py-1"><i class="fas fa-check-circle text-success me-2"></i>@rec</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clinical Parameters Summary -->
+    <div class="card p-3 mt-4">
+        <h6 class="mb-3">Clinical Parameters Summary</h6>
+        <div class="row g-2 text-center">
+            <div class="col-md-2"><div class="bg-light rounded p-2"><small class="text-muted d-block">BP</small><strong>@Model.Parameters.SystolicBP/@Model.Parameters.DiastolicBP</strong></div></div>
+            <div class="col-md-2"><div class="bg-light rounded p-2"><small class="text-muted d-block">Cholesterol</small><strong>@Model.Parameters.CholesterolTotal mg/dL</strong></div></div>
+            <div class="col-md-2"><div class="bg-light rounded p-2"><small class="text-muted d-block">BMI</small><strong>@Model.Parameters.BMI</strong></div></div>
+            <div class="col-md-2"><div class="bg-light rounded p-2"><small class="text-muted d-block">Glucose</small><strong>@Model.Parameters.BloodGlucose mg/dL</strong></div></div>
+            <div class="col-md-2"><div class="bg-light rounded p-2"><small class="text-muted d-block">Smoking</small><strong>@Model.Parameters.SmokingStatus</strong></div></div>
+            <div class="col-md-2"><div class="bg-light rounded p-2"><small class="text-muted d-block">Exercise</small><strong>@Model.Parameters.ExerciseFrequency</strong></div></div>
+        </div>
+    </div>
+
+    <div class="mt-4 d-flex gap-2 justify-content-end">
+        <a href="@Url.Action("Assess","Prediction",new{id=Model.Patient.PatientID})" class="btn btn-outline-danger">
+            <i class="fas fa-redo me-2"></i>New Assessment
+        </a>
+        <a href="@Url.Action("History","Patient",new{id=Model.Patient.PatientID})" class="btn btn-outline-secondary">
+            <i class="fas fa-history me-2"></i>Patient History
+        </a>
+        <button onclick="window.print()" class="btn btn-outline-dark">
+            <i class="fas fa-print me-2"></i>Print Report
+        </button>
+    </div>
+</div>
+</div>
+
+@section Scripts {
+<script>
+new Chart(document.getElementById('probChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Low', 'Medium', 'High', 'Critical'],
+        datasets: [{
+            label: 'Probability',
+            data: [
+                @Model.Prediction.ProbLow.ToString("F4"),
+                @Model.Prediction.ProbMedium.ToString("F4"),
+                @Model.Prediction.ProbHigh.ToString("F4"),
+                @Model.Prediction.ProbCritical.ToString("F4")
+            ],
+            backgroundColor: ['#27ae60','#f39c12','#e74c3c','#2c3e50']
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: { y: { beginAtZero: true, max: 1 } },
+        plugins: { legend: { display: false } }
+    }
+});
+</script>
+}

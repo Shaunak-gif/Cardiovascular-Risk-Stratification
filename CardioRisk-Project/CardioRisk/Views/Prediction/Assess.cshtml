@@ -1,0 +1,100 @@
+@model CardioRisk.Models.ClinicalParametersModel
+@{
+    ViewBag.Title = "Cardiovascular Assessment";
+    var patient = ViewBag.Patient as CardioRisk.Models.PatientModel;
+}
+<div class="row justify-content-center">
+<div class="col-lg-9">
+<div class="card p-4">
+    <h3 class="mb-1"><i class="fas fa-stethoscope text-danger me-2"></i>Cardiovascular Assessment</h3>
+    <p class="text-muted mb-4">Patient: <strong>@patient?.FullName</strong> &nbsp;|&nbsp; Age: @patient?.Age</p>
+
+    @using (Html.BeginForm("Assess","Prediction",FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.PatientID)
+
+        <h5 class="text-danger mt-3 mb-3 border-bottom pb-2">Vital Signs & Labs</h5>
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Age*</label>
+                @Html.TextBoxFor(m => m.Age, new { @class = "form-control", type = "number" })
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Systolic BP (mmHg)*</label>
+                @Html.TextBoxFor(m => m.SystolicBP, new { @class = "form-control", type = "number", step = "0.1" })
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Diastolic BP (mmHg)*</label>
+                @Html.TextBoxFor(m => m.DiastolicBP, new { @class = "form-control", type = "number", step = "0.1" })
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Heart Rate (bpm)</label>
+                @Html.TextBoxFor(m => m.HeartRate, new { @class = "form-control", type = "number" })
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Total Cholesterol (mg/dL)*</label>
+                @Html.TextBoxFor(m => m.CholesterolTotal, new { @class = "form-control", type = "number", step = "0.1" })
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">HDL Cholesterol (mg/dL)</label>
+                @Html.TextBoxFor(m => m.HDLCholesterol, new { @class = "form-control", type = "number", step = "0.1" })
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">LDL Cholesterol (mg/dL)</label>
+                @Html.TextBoxFor(m => m.LDLCholesterol, new { @class = "form-control", type = "number", step = "0.1" })
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">BMI (kg/m²)*</label>
+                @Html.TextBoxFor(m => m.BMI, new { @class = "form-control", type = "number", step = "0.01" })
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Fasting Blood Glucose (mg/dL)*</label>
+                @Html.TextBoxFor(m => m.BloodGlucose, new { @class = "form-control", type = "number", step = "0.1" })
+            </div>
+        </div>
+
+        <h5 class="text-danger mt-4 mb-3 border-bottom pb-2">Lifestyle & History</h5>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Smoking Status*</label>
+                @Html.DropDownListFor(m => m.SmokingStatus, new SelectList(new[]{"Never","Former","Current"}), "-- Select --", new { @class = "form-select" })
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Exercise Frequency*</label>
+                @Html.DropDownListFor(m => m.ExerciseFrequency, new SelectList(new[]{"None","Low","Moderate","High"}), "-- Select --", new { @class = "form-select" })
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Stress Level</label>
+                @Html.DropDownListFor(m => m.StressLevel, new SelectList(new[]{"Low","Medium","High"}), "-- Select --", new { @class = "form-select" })
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Alcohol Use</label>
+                @Html.DropDownListFor(m => m.AlcoholUse, new SelectList(new[]{"None","Occasional","Regular","Heavy"}), "-- Select --", new { @class = "form-select" })
+            </div>
+            <div class="col-md-4 d-flex align-items-center mt-4">
+                <div class="form-check me-4">
+                    @Html.CheckBoxFor(m => m.HasDiabetes, new { @class = "form-check-input" })
+                    <label class="form-check-label">Has Diabetes</label>
+                </div>
+                <div class="form-check">
+                    @Html.CheckBoxFor(m => m.FamilyHistory, new { @class = "form-check-input" })
+                    <label class="form-check-label">Family History of CVD</label>
+                </div>
+            </div>
+            <div class="col-12">
+                <label class="form-label">Clinical Notes</label>
+                @Html.TextAreaFor(m => m.Notes, new { @class = "form-control", rows = 2 })
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-danger btn-lg">
+                <i class="fas fa-brain me-2"></i>Run Risk Assessment
+            </button>
+            <a href="@Url.Action("Profile","Patient",new{id=Model.PatientID})" class="btn btn-outline-secondary ms-2">Cancel</a>
+        </div>
+    }
+</div>
+</div>
+</div>

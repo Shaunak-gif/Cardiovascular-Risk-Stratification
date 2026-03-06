@@ -1,0 +1,52 @@
+@model CardioRisk.Models.PatientModel
+@{
+    ViewBag.Title = "Register Patient";
+}
+<div class="row justify-content-center">
+<div class="col-lg-7">
+<div class="card p-4">
+    <h3 class="mb-4"><i class="fas fa-user-plus text-danger me-2"></i>Register New Patient</h3>
+    @using (Html.BeginForm("Register","Patient",FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">First Name*</label>
+                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", placeholder = "Enter first name" })
+                @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger small" })
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Last Name*</label>
+                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", placeholder = "Enter last name" })
+                @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger small" })
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Date of Birth*</label>
+                @Html.TextBoxFor(m => m.DateOfBirth, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                @Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @class = "text-danger small" })
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Gender*</label>
+                @Html.DropDownListFor(m => m.Gender, new SelectList(new[]{"Male","Female","Other"}), "-- Select --", new { @class = "form-select" })
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Email</label>
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email" })
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Phone</label>
+                @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+            </div>
+            <div class="col-12">
+                <label class="form-label">Address</label>
+                @Html.TextAreaFor(m => m.Address, new { @class = "form-control", rows = 2 })
+            </div>
+        </div>
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-danger"><i class="fas fa-save me-2"></i>Register Patient</button>
+            <a href="@Url.Action("Index","Patient")" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+    }
+</div>
+</div>
+</div>

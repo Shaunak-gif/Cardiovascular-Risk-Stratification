@@ -1,0 +1,48 @@
+@{
+    ViewBag.Title = "Home";
+}
+<div class="text-center py-5">
+    <div class="mb-4">
+        <i class="fas fa-heartbeat text-danger" style="font-size:5rem;"></i>
+    </div>
+    <h1 class="display-4 fw-bold">Cardiovascular Risk Stratification</h1>
+    <p class="lead text-muted">AI-powered prognostic modeling using Naive Bayes classification</p>
+    <div class="mt-4">
+        <a href="@Url.Action("Dashboard","Home")" class="btn btn-danger btn-lg me-3">
+            <i class="fas fa-chart-pie me-2"></i>View Dashboard
+        </a>
+        <a href="@Url.Action("Register","Patient")" class="btn btn-outline-danger btn-lg">
+            <i class="fas fa-user-plus me-2"></i>New Patient
+        </a>
+    </div>
+    <div class="row mt-5 g-4">
+        <div class="col-md-3">
+            <div class="card p-3 text-center">
+                <i class="fas fa-brain fa-2x text-danger mb-2"></i>
+                <h6>Naive Bayes ML</h6>
+                <small class="text-muted">Probabilistic classification</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 text-center">
+                <i class="fas fa-layer-group fa-2x text-warning mb-2"></i>
+                <h6>4-Tier Risk Stratification</h6>
+                <small class="text-muted">Low / Medium / High / Critical</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 text-center">
+                <i class="fas fa-file-medical fa-2x text-success mb-2"></i>
+                <h6>Prognostic Reports</h6>
+                <small class="text-muted">Auto-generated clinical recommendations</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 text-center">
+                <i class="fas fa-history fa-2x text-info mb-2"></i>
+                <h6>History Tracking</h6>
+                <small class="text-muted">Longitudinal patient monitoring</small>
+            </div>
+        </div>
+    </div>
+</div>
